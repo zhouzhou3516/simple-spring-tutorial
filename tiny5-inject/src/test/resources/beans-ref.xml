@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE beans [
+        <!ELEMENT beans (bean*)>
+        <!ELEMENT bean (property*)>
+        <!ATTLIST bean class CDATA "">
+        <!ATTLIST bean ref CDATA "">
+        <!ATTLIST bean name CDATA "">
+        <!ATTLIST bean id CDATA "">
+        <!ELEMENT property EMPTY>
+        <!ATTLIST property name CDATA "">
+        <!ATTLIST property value CDATA "">
+        <!ATTLIST property ref CDATA "">
+        ]>
+<beans>
+    <bean name="helloWorldService" class="com.qunar.campus.spring.tiny.xml.HelloWorldService">
+        <property name="text" value="Hello World!"/>
+    </bean>
+
+    <bean name="loginService" class="com.qunar.campus.spring.tiny.xml.LoginService">
+        <property name="username" value="admin"/>
+        <property name="password" value="123"/>
+        <property name="welcome" ref="helloWorldService"/>
+    </bean>
+</beans>
+
+

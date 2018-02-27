@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE beans [
+        <!ELEMENT beans (bean*)>
+        <!ELEMENT bean EMPTY>
+        <!ATTLIST bean class CDATA "">
+        <!ATTLIST bean ref CDATA "">
+        <!ATTLIST bean name CDATA "">
+        <!ATTLIST bean id CDATA "">
+        ]>
+<!--
+<!ATTLIST 元素名称 属性名称 属性类型 默认值>
+ -->
+
+<beans>
+    <bean id="userService" class="com.qunar.campus.spring.tutorial.factory.BetterMovieService"/>
+</beans>

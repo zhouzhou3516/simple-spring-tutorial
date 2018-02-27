@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--
+     You use the PropertyPlaceholderConfigurer to externalize property values from a bean definition
+     in a separate file using the standard Java Properties format.
+     Doing so enables the person deploying an application to customize
+     environment-specific properties such as database URLs and passwords,
+     without the complexity or risk of modifying the main XML definition file or files for the container.
+
+
+     不过这个类是怎么工作的呢？
+     @see BeanFactoryPostProcessor
+
+     看懂这个比较重要
+     @see http://docs.spring.io/spring/docs/4.1.5.RELEASE/spring-framework-reference/html/resources.html#resources-classpath-wildcards
+    -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:jdbc.properties"/>
+    </bean>
+
+    <!--
+    spring2.5之后,在context命名空间下面增加了property-placeholder用来简写
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    -->
+
+    <!--
+    init 方法是什么时候调用呢
+    -->
+    <bean id="dataSource" init-method="init"
+          class="com.qunar.campus.spring.tutorial.application.case1.property.holder.FakeDataSource" >
+        <constructor-arg name="userName" value="${jdbc.username}"/>
+        <constructor-arg name="password" value="${jdbc.password}"/>
+    </bean>
+
+
+</beans>

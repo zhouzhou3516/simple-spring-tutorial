@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+             http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--context:component-scan base-package="com.qunar.campus.spring.tutorial.homework3.controller"/-->
+    <context:component-scan base-package="com.benmu.web.spring"/>
+    <context:component-scan base-package="com.qunar.campus.spring.tutorial.homework3.controller"/>
+    <!--enable @JsonBoyd,采用com.benmu.web.spring.WebConfig mvc配置，不采用默认的annotation-driven-->
+    <!--<mvc:annotation-driven/>-->
+
+    <mvc:resources location="/WEB-INF/resources/" mapping="/resources/**"/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/"/>
+            <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/dologin"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+            <bean
+              class="com.qunar.campus.spring.tutorial.homework3.controller.interceptor.AuthInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+    <!-- exception handler -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">errors/error</prop>
+                <prop key="java.lang.Throwable">errors/404</prop>
+            </props>
+        </property>
+        <!-- 默认HTTP状态码, 有时候前端的Ajax不太好处理500的返回，需要你改成200-->
+        <property name="statusCodes">
+            <props>
+                <prop key="errors/error">500</prop>
+                <prop key="errors/404">404</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="viewResolver"
+      class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/-->
+        <property name="prefix" value="/WEB-INF/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+</beans>

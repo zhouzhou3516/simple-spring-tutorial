@@ -1,0 +1,26 @@
+<beans>
+    <!--jdbcTemplate 复用了 spring ,通过applicationContext-->
+    <bean id="userDao" class="com.qunar.campus.spring.tutorial.homework.start.dao.UserDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    <bean id="roleDao" class="com.qunar.campus.spring.tutorial.homework.start.dao.RoleDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    <bean id="roleMappingDao"
+      class="com.qunar.campus.spring.tutorial.homework.start.dao.RoleMappingDao">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    <bean id="cachedViewService"
+      init-method="init"
+      class="com.qunar.campus.spring.tutorial.homework.start.service.CachedViewServiceImpl">
+        <property name="userManageService" ref="userManageService"/>
+    </bean>
+
+    <!-- 这里定义了init方法-->
+    <bean id="userManageService"
+      class="com.qunar.campus.spring.tutorial.homework.start.service.UserManageServiceImpl">
+        <property name="userDao" ref="userDao"/>
+        <property name="roleDao" ref="roleDao"/>
+        <property name="roleMappingDao" ref="roleMappingDao"/>
+    </bean>
+</beans>

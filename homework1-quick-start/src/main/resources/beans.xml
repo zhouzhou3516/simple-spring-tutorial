@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="classpath*:/dao.xml" />
+
+    <bean id="cachedViewService"
+      init-method="init"
+      destroy-method="destroy"
+      class="com.qunar.campus.spring.tutorial.homework.start.service.CachedViewServiceImpl">
+        <property name="userManageService" ref="userManageService"/>
+    </bean>
+
+    <!-- 这里定义了init方法-->
+    <bean id="userManageService"
+      class="com.qunar.campus.spring.tutorial.homework.start.service.UserManageServiceImpl">
+        <property name="userDao" ref="userDao"/>
+        <property name="roleDao" ref="roleDao"/>
+        <property name="roleMappingDao" ref="roleMappingDao"/>
+    </bean>
+
+    <!--
+    但是如果通常情况下，我们不会使用配置的方式来定义bean，
+    而是用之前的auto detected 和 auto-wire来
+    也就是使用注解来注入，那如何配置呢？
+    -->
+    <context:component-scan base-package="com.qunar.campus.spring.tutorial.homework"/>
+
+</beans>

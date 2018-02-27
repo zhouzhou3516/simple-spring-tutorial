@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <!--
+    dataSource是继DriverManage之后的一个东西。是JDBC标准
+
+    dataSource如其名字，是对数据源的抽象。我们不用关心连接的细节（像DriverManage一样）
+    很多dataSource的实现，都会在内部封装一个连接池。
+
+    why do we use a data source instead of a driver manager
+    @see http://stackoverflow.com/questions/15198319/why-do-we-use-a-datasource-instead-of-a-drivermanager
+
+    -->
+
+    <context:property-placeholder location="fake.jdbc.properties"/>
+
+    <!--
+    这是一个对DriverManager的封装实现
+    建议看一看里面的代码，很少
+    -->
+    <bean id="driverManagerDataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!--
+    在Tomcat 7以前都是使用common-dbcp作为连接池
+    -->
+    <bean id="basicDataSource"
+          class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <!-- 以下这些参数.. 嗯自己回去看吧 -->
+        <property name="maxIdle" value="30"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxWait" value="60000"/>
+        <property name="maxActive" value="1000"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="validationQuery" value="select 1 from dual"/>
+    </bean>
+
+    <!-- 还有c3p0-->
+    <bean id="comboPooledDataSource"
+          class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="acquireIncrement" value="1"/>
+        <property name="initialPoolSize" value="30"/>
+        <property name="maxIdleTime" value="60"/>
+        <property name="maxPoolSize" value="50"/>
+        <property name="minPoolSize" value="30"/>
+        <property name="acquireRetryDelay" value="1000"/>
+        <property name="acquireRetryAttempts" value="60"/>
+        <property name="breakAfterAcquireFailure" value="false"/>
+    </bean>
+
+    <!--
+    tomcat jdbc
+     -->
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="maxActive" value="20" />
+        <property name="maxIdle" value="20" />
+        <property name="maxWait" value="3000" />
+        <property name="validationQuery" value="select 1" />
+        <property name="validationInterval" value="30000" />
+        <property name="testOnBorrow" value="true" />
+        <property name="testWhileIdle" value="true" />
+    </bean>
+
+    <!--还有 bonecp, druid 等等，他们分别提供各种不同的功能, 当然也有不同的缺陷-->
+
+    <!--
+     一些比较老的业务线可能各个DataSource都有使用, 你们去了之后要习惯。
+     另外不同的dataSource有不同的缺陷，喜欢的话下来自己了解
+     -->
+
+    <!--
+    现在qunar dba搞了一个PXC
+    @see http://wiki.corp.qunar.com/x/gGNPAw
+
+    大致的原理是连接数据库不直接使用ip和端口，而是使用一个namespace来连接
+    为什么要这么做,自己上wiki面搜
+
+    同时dba也提供了一个基于tomcat-jdbc实现的dataSource来支持PXC ===> 这个是我猜的
+
+    !important 在你们的项目中，如果有资源(问yaya)，我更建议使用dba提供的这个PXC
+    !important 如果没有资源的话，就使用tomcat-jdbc,
+
+    至于为什么，请戳下面这个链接
+    @see https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html
+     -->
+
+    <!-- 如果使用从库，写成： ReadOnlyDataSource -->
+    <bean id="readWriteDataSource" class="com.qunar.db.resource.ReadWriteDataSource">
+        <!-- pxc的namespace，由dba分配-->
+        <constructor-arg name="namespace" value="qta_order"/>
+        <!-- 数据库用户名-->
+        <constructor-arg name="username" value="${jdbc.username}"/>
+        <!-- 密码-->
+        <constructor-arg name="cipher"  value="${jdbc.password}"/>
+        <!-- use的数据库-->
+        <constructor-arg name="dbName" value="qta_order_store"/>
+        <!-- 连接池最小大小 -->
+        <constructor-arg name="corePoolSize"  value="30" />
+        <!-- 连接池最大大小-->
+        <constructor-arg name="maxPoolSize" value="50" />
+        <!-- 链接mysql的jdbc参数 -->
+        <constructor-arg name="jdbcUrlOption"  value="characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;generateSimpleParameterMetadata=true" />
+    </bean>
+
+    <!--
+     另外一些dataSource的实现其实可以互相搭配使用
+     举个例子，酒店QTA的项目中都使用dba提供的dataSource，不过实现了一个代理类，将druid的数据库监控加入其中。
+    -->
+
+</beans>

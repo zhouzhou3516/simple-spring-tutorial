@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/jdbc
+       http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+       http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--
+    注意在，练习中我们都使用h2这个数据库。这是一个本地数据库
+
+    使用他需要3个依赖。
+    1. h2
+    2. tomcat jdbc
+    3. spring jdbc
+
+    他的配置，暂时不用细纠，复制粘贴即可, 我们关注的不是他
+    -->
+
+    <context:property-placeholder location="h2.jdbc.properties"/>
+
+    <!--  数据源 -->
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="maxActive" value="20" />
+        <property name="maxIdle" value="20" />
+        <property name="maxWait" value="3000" />
+        <property name="validationQuery" value="select 1" />
+        <property name="validationInterval" value="30000" />
+        <property name="testOnBorrow" value="true" />
+        <property name="testWhileIdle" value="true" />
+    </bean>
+
+    <!-- 用建表语句，初始化一个库 -->
+    <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS">
+        <jdbc:script location="classpath:user-table.ddl" />
+    </jdbc:initialize-database>
+
+    <!-- H2 mixed mode -->
+    <bean id="h2Server" class="org.h2.tools.Server"
+          factory-method="createTcpServer" init-method="start"
+          destroy-method="shutdown">
+        <constructor-arg>
+            <list>
+                <value>-tcpPort</value>
+                <value>9081</value>
+                <value>-tcpAllowOthers</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- 载入我们可爱的template们 -->
+    <context:component-scan base-package="com.qunar.campus.spring.tutorial.jdbc.template"/>
+
+</beans>

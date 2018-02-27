@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!--
+    本模块主要针对BeanFactory的基本使用
+    -->
+
+    <!-- 1. 使用构造函数初始化! -->
+    <bean id="movieFinder" class="com.qunar.campus.spring.tutorial.interfaces.FileMovieFinder"/>
+
+    <bean id="constructorMovieService1" class="com.qunar.campus.spring.tutorial.bean.factory.ConstructorMovieService">
+        <constructor-arg index="0" ref="movieFinder"/>
+    </bean>
+
+    <bean id="constructorMovieService2" class="com.qunar.campus.spring.tutorial.bean.factory.ConstructorMovieService">
+        <constructor-arg name="finder" ref="movieFinder"/>
+    </bean>
+
+    <!--
+
+    FAQ : id 和 name 有什么不同呢？
+
+    So basically the id attribute conforms to the XML id attribute
+    standards whereas name is a little more flexible. Generally speaking,
+     I use name pretty much exclusively.
+
+    @see http://docs.spring.io/spring/docs/2.5.x/reference/beans.html#beans-beanname
+
+    -->
+    <bean name="anotherFinder"
+          class="com.qunar.campus.spring.tutorial.interfaces.FileMovieFinder"/>
+
+
+    <!--
+    2. 注入字段， 需要实现getter and setter方法
+    -->
+    <bean id="filedAccessMovieService"
+          class="com.qunar.campus.spring.tutorial.bean.factory.FieldAccessMovieService">
+        <property name="finder" ref="anotherFinder"/>
+    </bean>
+
+    <!--
+    3. static factory method
+    -->
+    <bean id="staticMethodMovieService"
+          class="com.qunar.campus.spring.tutorial.bean.factory.StaticMethodMovieServiceFactory"
+          factory-method="build"/>
+
+    <!--
+    4. create via the factory bean
+    -->
+    <bean id="factoryBean"
+          class="com.qunar.campus.spring.tutorial.bean.factory.StaticMethodMovieServiceFactory"/>
+    <bean id="createViaTheFactoryBean"
+          factory-bean="factoryBean"
+          factory-method="buildViaBean"/>
+
+    <!--
+    5. primitive values
+    -->
+    <bean id="primitiveService"
+          class="com.qunar.campus.spring.tutorial.bean.factory.PrimitiveMovieService">
+        <property name="filePath" value="/home/q/www"/>
+        <property name="movieAmount" value="1"/>
+        <property name="movieFinder" ref="anotherFinder"/>
+    </bean>
+
+    <!--
+    6. import another config file
+    问题：classpath和classpath*之间有什么不同呢？
+    什么是ant风格?
+    -->
+    <import resource="another-config.xml"/>
+    <import resource="classpath:another-config.xml"/>
+    <import resource="classpath*:another-config.xml"/>
+
+    <!--
+    7. collection values
+    问题：集合类如何定义，例如，如果我的一个类的成员是一个Set类型的数据，应该如何注入？
+    他在哪个命名空间下面呢？
+    -->
+
+    <!--
+    还有个p的段标签，或许有用
+    -->
+    <bean id="shortTag"
+          class="com.qunar.campus.spring.tutorial.bean.factory.PrimitiveMovieService"
+           p:filePath="/home/q/www"
+           p:movieAmount="1"
+           p:movieFinder-ref="anotherFinder">
+    </bean>
+
+    <!--
+    还有很多不常用的，例如继承,内部类等等，详情参考
+    @see http://docs.spring.io/spring/docs/4.1.5.RELEASE/spring-framework-reference/html/beans.html#beans-introduction
+    -->
+
+</beans>

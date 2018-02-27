@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE beans [
+        <!ELEMENT beans (bean+)>
+        <!ELEMENT bean  (id, name, class, ref*)>
+        <!ELEMENT id (#PCDATA)>
+        <!ELEMENT name (#PCDATA)>
+        <!ELEMENT class (#PCDATA)>
+        <!ELEMENT ref (#PCDATA)>
+        ]>
+<!--
+
++表示至少出现一次
+*表示至少出现0次活多次
+
+当然还包括更多复杂的例子。感觉很无力，暂时就介绍到这里
+
+也许你现在还不清楚spring的xml配置，但是如果你使用了spring之后再来看的话就会恍然大悟
+
+-->
+
+<beans>
+    <bean>
+        <id>1</id>
+        <name>betterMovieService</name>
+        <class>com.qunar.campus.spring.tutorial.factory.BetterMovieService</class>
+    </bean>
+
+    <bean>
+        <id>2</id>
+        <name>factory</name>
+        <class>com.qunar.campus.spring.tutorial.factory.MovieRelativeFactory</class>
+    </bean>
+</beans>
+
+

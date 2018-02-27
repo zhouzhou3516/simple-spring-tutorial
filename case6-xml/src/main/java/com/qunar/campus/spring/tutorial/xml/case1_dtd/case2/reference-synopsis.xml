@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE student SYSTEM "stand-alone.dtd">
+
+<student>
+    <id>1</id>
+    <name>yushen.ma</name>
+    <male>boy</male>
+    <age>23</age>
+</student>

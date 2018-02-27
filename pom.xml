@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.qunar.campus</groupId>
+    <artifactId>simple-spring-tutorial</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>com.benmu</groupId>
+        <artifactId>root-bom</artifactId>
+        <version>1.0.34</version>
+    </parent>
+
+    <!-- sub modules of the whole project -->
+    <modules>
+        <module>case0-base</module>
+        <module>case1-interfaces</module>
+        <module>case2-factory</module>
+        <module>case3-generics</module>
+        <module>case4-reflection</module>
+        <module>case5-advance-factory</module>
+        <module>case6-xml</module>
+        <module>case7-bean-factory</module>
+        <module>case8-application-context</module>
+        <module>case9-bean-lifecycle</module>
+        <module>case10-data-source</module>
+        <module>case11-jdbc-template</module>
+        <module>case12-dynamic-proxy</module>
+        <module>case13-meta-data</module>
+        <module>case14-aop</module>
+        <module>case15-transactional</module>
+        <module>case16-web-framework</module>
+        <module>case17-spring-mvc-parameters</module>
+        <module>case18-spring-mvc-resolver</module>
+
+        <module>tiny1-container</module>
+        <module>tiny2-bean-factory</module>
+        <module>tiny3-factory-property</module>
+        <module>tiny4-factory-xml</module>
+        <module>tiny5-inject</module>
+        <module>tiny6-application-context</module>
+        <module>tiny7-dynamic-proxy</module>
+        <module>tiny8-aspect-j-wave</module>
+        <module>tiny9-auto-aop-proxy</module>
+        <module>sample1-simple-web-app</module>
+        <module>case19-spring-mvc-other</module>
+        <module>homework1-quick-start</module>
+        <module>homework1-quick-start-annotation</module>
+        <module>homework1-quick-start-container</module>
+        <module>homework2-user-web</module>
+        <module>homework3-user-manage-system</module>
+    </modules>
+
+    <!-- define the properties that easy to up-level -->
+    <properties>
+        <campus.spring.tutorial>1.0-SNAPSHOT</campus.spring.tutorial>
+
+        <benmu.root.bom>1.0.34</benmu.root.bom>
+        <google.guava.version>18.0</google.guava.version>
+        <apache.common.utils>3.1</apache.common.utils>
+        <apache.common.collections>3.2.1</apache.common.collections>
+        <junit.test.frame>4.8.2</junit.test.frame>
+        <aop.alliance.version>1.0</aop.alliance.version>
+        <aspect.j.version>1.7.0</aspect.j.version>
+        <cglib.version>2.1_3</cglib.version>
+        <org.springframework.version>4.0.0.RELEASE</org.springframework.version>
+        <jetty.version>6.1.22</jetty.version>
+    </properties>
+
+    <!--
+
+    FAQ 1: differences between dependency management and dependencies in maven?
+    @see http://stackoverflow.com/questions/2619598/differences-between-dependencymanagement-and-dependencies-in-maven
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- self module reference -->
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>case0-base</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>case1-interfaces</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>case2-factory</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>case4-reflection</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>case7-bean-factory</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <!-- tiny spring -->
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>tiny1-container</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>tiny4-factory-xml</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>tiny5-inject</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>tiny6-application-context</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>tiny7-dynamic-proxy</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.campus</groupId>
+                <artifactId>tiny8-aspect-j-wave</artifactId>
+                <version>${campus.spring.tutorial}</version>
+            </dependency>
+
+            <!-- fashion guava ! u'd like it-->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+            </dependency>
+
+            <!-- apache utils another useful collection of utils -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.common.utils}</version>
+            </dependency>
+
+            <!-- apache utils of collections -->
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${apache.common.collections}</version>
+            </dependency>
+
+            <!-- test unit -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.test.frame}</version>
+            </dependency>
+
+            <!-- aop alliance -->
+            <dependency>
+                <groupId>aopalliance</groupId>
+                <artifactId>aopalliance</artifactId>
+                <version>${aop.alliance.version}</version>
+            </dependency>
+
+            <!-- aspect J-->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspect.j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>3.1</version>
+            </dependency>
+
+            <!-- reflections api -->
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>0.9.9</version>
+            </dependency>
+
+            <!-- apache common dbcp -->
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>1.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>c3p0</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>0.9.1.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qunar.db</groupId>
+                <artifactId>db-datasource</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                </exclusions>
+                <version>1.3.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jdbc</artifactId>
+                <version>7.0.30</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.10</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.34</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.3.174</version>
+            </dependency>
+
+            <!-- Apache Commons FileUpload -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.3.1</version>
+            </dependency>
+
+            <!-- Apache Commons IO -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>

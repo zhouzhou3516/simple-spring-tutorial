@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dog="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--
+    The use of <context:component-scan> implicitly enables the functionality of
+    <context:annotation-config>. There is usually no need to include the
+     <context:annotation-config> element when using <context:component-scan>.
+    -->
+    <dog:component-scan
+            base-package="com.qunar.campus.spring.tutorial.application.case3.auto.detect"/>
+
+    <!--
+    可以了解一下以下两个标签
+    <context:include-filter
+    <context:exclude-filter
+    -->
+
+    <!--
+    当你熟悉了以上配置。可以看一看Java based configuration
+    不过这个不是一个常用的功能
+    @see http://www.tutorialspoint.com/spring/spring_java_based_configuration.htm
+    -->
+
+</beans>

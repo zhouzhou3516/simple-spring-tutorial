@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="com.qunar.campus.spring.tutorial.controller"/>
+
+    <mvc:annotation-driven/>
+
+    <mvc:default-servlet-handler/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <ref bean="simpleInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- exception handler -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">errors/error</prop>
+                <prop key="java.lang.Throwable">errors/err</prop>
+            </props>
+        </property>
+        <!-- 默认HTTP状态码, 有时候前端的Ajax不太好处理500的返回，需要你改成200-->
+        <property name="statusCodes">
+            <props>
+                <prop key="errors/error">500</prop>
+                <prop key="errors/404">404</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--
+     注意，exception handler
+     异常出现后，他跳转到/errors/error这个url上 （内部跳转）
+
+     但是你用一下就知道会跳转到/exception/errors/error,因为在未定义默认的resolver的时候,前缀就是/exception
+     -->
+
+    <!--
+        当我们配置了jspViewResolver的时候
+        他会跳转到/WEB-INF/jsp/errors/error.jsp
+        got it?
+    -->
+
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+</beans>

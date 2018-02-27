@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE beans [
+        <!ELEMENT beans (bean*)>
+        <!ELEMENT bean (property*)>
+        <!ATTLIST bean class CDATA "">
+        <!ATTLIST bean ref CDATA "">
+        <!ATTLIST bean name CDATA "">
+        <!ATTLIST bean id CDATA "">
+        <!ELEMENT property EMPTY>
+        <!ATTLIST property name CDATA "">
+        <!ATTLIST property value CDATA "">
+        <!ATTLIST property ref CDATA "">
+        ]>
+<beans>
+
+    <bean name="dbUserService"
+          class="com.qunar.campus.spring.tiny.aspect.auto.DBUserService"/>
+
+    <bean name="cacheUserService"
+          class="com.qunar.campus.spring.tiny.aspect.auto.CacheUserService"/>
+
+    <bean name="priceService" class="com.qunar.campus.spring.tiny.aspect.auto.PriceService"/>
+
+    <bean name="timeInterceptor" class="com.qunar.campus.spring.tiny.aspect.auto.TimerInterceptor"/>
+
+    <!--
+    aop:config advice标签其实就和这个实现相类似
+
+    这次我们只是处理PriceService.processPrice的方法
+    -->
+    <bean name="timeAdvisor" class="com.qunar.campus.spring.tiny.aspect.auto.AOPAdvisor">
+        <property name="expression"
+                  value="execution(* com.qunar.campus.spring.tiny.aspect.auto.PriceService.processPrice(..))"/>
+        <property name="methodInterceptor"
+                  ref="timeInterceptor"/>
+    </bean>
+
+</beans>
+
+
